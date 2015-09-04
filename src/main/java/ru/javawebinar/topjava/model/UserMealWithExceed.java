@@ -8,11 +8,8 @@ import java.time.LocalDateTime;
  */
 public class UserMealWithExceed {
     protected final LocalDateTime dateTime;
-
     protected final String description;
-
     protected final int calories;
-
     protected final boolean exceed;
 
     public UserMealWithExceed(LocalDateTime dateTime, String description, int calories, boolean exceed) {
