@@ -3,15 +3,8 @@ package ru.javawebinar.topjava.util;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.model.UserMealWithExceed;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.Month;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.time.*;
+import java.util.*;
 
 /**
  * GKislin
@@ -27,77 +20,40 @@ public class UserMealsUtil{
                 new UserMeal(LocalDateTime.of(2015, Month.MAY, 31,13,0), "Обед", 500),
                 new UserMeal(LocalDateTime.of(2015, Month.MAY, 31,20,0), "Ужин", 510)
         );
-        getFilteredMealsWithExceeded(mealList, LocalTime.of(7, 0), LocalTime.of(12,0), 2000);
+
+        List<UserMealWithExceed> mealExceeded = getFilteredMealsWithExceeded(mealList, LocalTime.of(12, 0), LocalTime.of(13,0), 2000);
+        System.out.println(mealExceeded.toString());
 //        .toLocalDate();
 //        .toLocalTime();
-    }
-
-
-    public static boolean isBetween(LocalTime check, LocalTime startTime, LocalTime endTime) {
-        return ((check.equals(startTime) || check.isAfter(startTime)) &&
-                (check.equals(endTime) || check.isBefore(endTime)));
     }
 
     public static List<UserMealWithExceed>  getFilteredMealsWithExceeded(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         // TODO return filtered list with correctly exceeded field
         //Подсчёт суммарных калорий за день
-        HashMap<LocalDate,Integer> daysCal= new HashMap<>();
+        HashMap<LocalDate,Integer> sumCaloriesPerDay = new HashMap<>();
 
-        //Готовая таблица на вывод
-        List<UserMealWithExceed> mealExceeded = new ArrayList();
-
-        LocalDate curDate;
-        int curCalories;
         for(UserMeal meal : mealList) {
-           if(isBetween(meal.getDateTime().toLocalTime(),startTime,endTime)){
-               //Значения текущей записи
-               curDate=meal.getDateTime().toLocalDate();
-               curCalories=meal.getCalories();
+            LocalDate mealDate=meal.getDateTime().toLocalDate();
+            int mealCalories=meal.getCalories();
+            Integer curDaySumCalories=sumCaloriesPerDay.get(mealDate);
 
-               //Подсчитываем калории в сумме за день
-               if(daysCal.get(curDate)!=null){
-                   curCalories+=daysCal.get(curDate);
-               }
-               daysCal.put(curDate, curCalories);
+            if(curDaySumCalories==null)
+                curDaySumCalories=mealCalories;
+            else
+                curDaySumCalories+=mealCalories;
 
-           }
+            sumCaloriesPerDay.put(mealDate, curDaySumCalories);
        }
 
-        boolean curExceeded;
+        //Таблица на вывод
+        List<UserMealWithExceed> mealExceeded = new ArrayList();
+
         for(UserMeal meal : mealList) {
-            if(isBetween(meal.getDateTime().toLocalTime(),startTime,endTime)) {
-                //Значения текущей записи
-                curDate=meal.getDateTime().toLocalDate();
-                curCalories=daysCal.get(curDate);
-                curExceeded=curCalories>caloriesPerDay;
-
-                mealExceeded.add(new UserMealWithExceed(meal.getDateTime(), meal.getDescription(), curCalories, curExceeded));
-
+            if(TimeUtil.isBetween(meal.getDateTime().toLocalTime(), startTime,endTime)) {
+                mealExceeded.add(new UserMealWithExceed(meal.getDateTime(), meal.getDescription(), meal.getCalories(), sumCaloriesPerDay.get(meal.getDateTime().toLocalDate())>caloriesPerDay));
             }
         }
-
-        //LogOut
-        for(UserMealWithExceed meal : mealExceeded){
-            System.out.println(meal.getDateTime());
-            System.out.println(meal.getCalories());
-            System.out.println(meal.getExceed());
-        }
-
-//        final double[] total = mealList
-////        UserMeal mmm = mealList
-//                .stream()
-//                .filter(meal -> isBetween(meal.getDateTime().toLocalTime(), startTime, endTime))
-//                .collect(Collectors.groupingBy(meal -> meal.getDateTime().toLocalDate()));
-////                .mapToInt(UserMeal::getCalories)
-////                .sum();
-////                .forEach(System.out::println);
-//
-////        System.out.println(total);
-//        for(UserMeal meal : mealList) {
-//            System.out.println(meal.getDateTime());
-////            System.out.println(meal.getCalories());
-//        //    System.out.println(meal.getExceed());
-//        }
         return mealExceeded;
+
     }
 }

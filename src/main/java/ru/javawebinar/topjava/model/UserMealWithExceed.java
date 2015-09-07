@@ -12,6 +12,16 @@ public class UserMealWithExceed {
     protected final int calories;
     protected final boolean exceed;
 
+    @Override
+    public String toString() {
+        return "UserMealWithExceed{" +
+                "dateTime=" + dateTime +
+                ", description='" + description + '\'' +
+                ", calories=" + calories +
+                ", exceed=" + exceed +
+                '}';
+    }
+
     public UserMealWithExceed(LocalDateTime dateTime, String description, int calories, boolean exceed) {
         this.dateTime = dateTime;
         this.description = description;
@@ -19,19 +29,4 @@ public class UserMealWithExceed {
         this.exceed = exceed;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public int getCalories() {
-        return calories;
-    }
-
-    public boolean getExceed() {
-        return exceed;
-    }
 }
