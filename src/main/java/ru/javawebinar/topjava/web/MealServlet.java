@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.web;
 
 import ru.javawebinar.topjava.LoggerWrapper;
+import ru.javawebinar.topjava.model.UserMealWithExceed;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,7 +19,9 @@ public class MealServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LOG.debug("redirect to mealList");
 
-//        request.getRequestDispatcher("/mealList.jsp").forward(request, response);
-        response.sendRedirect("mealList.jsp");
+        request.setAttribute("mealList", UserMealWithExceed.mealExceeded);
+
+        request.getRequestDispatcher("/mealList.jsp").forward(request, response);
+//        response.sendRedirect("mealList.jsp");
     }
 }
