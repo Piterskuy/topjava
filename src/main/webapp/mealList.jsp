@@ -25,21 +25,29 @@
     </thead>
     <jsp:useBean id="mealList" scope="request" type="java.util.List"/>
     <c:forEach items="${mealList}" var="meal">
-        <tr>
+
         <c:choose>
             <c:when test="${meal.exceed==\"true\"}">
-                <td style="background-color: #ffcc99">${meal.dateTime}</td>
-                <td style="background-color: #ffcc99">${meal.description}</td>
-                <td style="background-color: #ffcc99">${meal.calories}</td>
+                <tr style="background-color: #ff9999">
             </c:when>
             <c:otherwise>
-                <td>${meal.dateTime}</td>
-                <td>${meal.description}</td>
-                <td>${meal.calories}</td>
+                <tr style="background-color: #ddffdd">
             </c:otherwise>
         </c:choose>
+        <td>${meal.dateTime}</td>
+        <td>${meal.description}</td>
+        <td>${meal.calories}</td>
         </tr>
     </c:forEach>
 </table>
+
+<%--Добавление записей--%>
+<%--<form action="meal.jsp" method="POST">--%>
+    <%--First Name: <input type="text" name="first_name">--%>
+    <%--<br />--%>
+    <%--Last Name: <input type="text" name="last_name" />--%>
+    <%--<input type="submit" value="Submit" />--%>
+<%--</form>--%>
+
 </body>
 </html>

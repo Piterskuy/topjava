@@ -24,4 +24,14 @@ public class MealServlet extends HttpServlet {
         request.getRequestDispatcher("/mealList.jsp").forward(request, response);
 //        response.sendRedirect("mealList.jsp");
     }
+//
+//
+//    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//        LOG.debug("redirect to mealList");
+//
+//        request.setAttribute("mealList", UserMealWithExceed.mealExceeded);
+//
+//        request.getRequestDispatcher("/mealList.jsp").forward(request, response);
+////        response.sendRedirect("mealList.jsp");
+//    }
 }
