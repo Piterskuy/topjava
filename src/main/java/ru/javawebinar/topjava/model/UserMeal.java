@@ -54,9 +54,21 @@ public class UserMeal extends BaseEntity {
     public String toString() {
         return "UserMeal{" +
                 "id=" + id +
-                ", dateTime=" + dateTime +
+//                ", dateTime=" + dateTime +
                 ", description='" + description + '\'' +
                 ", calories=" + calories +
                 '}';
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setCalories(int calories) {
+        this.calories = calories;
     }
 }
