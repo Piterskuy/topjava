@@ -38,23 +38,21 @@ public class JpaUserMealRepositoryImpl implements UserMealRepository {
         else if(get(userMeal.getId(), userId)!=null){
             return em.merge(userMeal);
         }else{
-            throw new NotFoundException("NFE");
+            return null;
         }
     }
 
     @Override
     @Transactional
     public boolean delete(int id, int userId) {
-        User ref = em.getReference(User.class, userId);
-
-        Query query = em.createQuery("DELETE FROM UserMeal  WHERE id=:id and user=:user");
-        return query.setParameter("id", id).setParameter("user", ref).executeUpdate() != 0;
+        Query query = em.createQuery("DELETE FROM UserMeal m WHERE m.id=:id and m.user.id=:userId");
+        return query.setParameter("id", id).setParameter("userId", userId).executeUpdate() != 0;
     }
 
     @Override
-    public UserMeal get(int id, int userId) {User ref = em.getReference(User.class, userId);
-        try{
-            return em.createNamedQuery(UserMeal.GET, UserMeal.class).setParameter("id", id).setParameter("user", ref).getSingleResult();
+    public UserMeal get(int id, int userId) {
+                try{
+            return em.createNamedQuery(UserMeal.GET, UserMeal.class).setParameter("id", id).setParameter("userId", userId).getSingleResult();
         }
        catch(NoResultException e){
            throw new NotFoundException("NFE");
